@@ -1,7 +1,8 @@
 export default function defineMakeUser({ ErrorResponse }) {
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    const validRoles = ['user', 'publisher', 'admin']
     return function makeUser({
-        _id = null,
+        id = null,
         name,
         email,
         password,
@@ -22,12 +23,12 @@ export default function defineMakeUser({ ErrorResponse }) {
             throw new ErrorResponse('Please add a password', 400)
         }
 
-        if ((role !== 'user' && role !== 'publisher', 400)) {
+        if (!validRoles.includes(role)) {
             throw new ErrorResponse('Please add a valid role', 400)
         }
 
         return Object.freeze({
-            getId: () => _id,
+            getId: () => id,
             getName: () => name,
             getEmail: () => email,
             getPassword: () => password,

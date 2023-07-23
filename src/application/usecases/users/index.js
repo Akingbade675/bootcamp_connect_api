@@ -9,7 +9,7 @@ import ErrorResponse from '../../../interfaces/utils/errorResponse'
 const matchPassword = encrypt().compareHash
 const getSignedJwtToken = signedToken().encode
 
-const registerUser = registerUserUseCase({ usersRepository })
+const registerUser = registerUserUseCase({ usersRepository, ErrorResponse })
 const getUser = getUserUseCase({ usersRepository })
 
 // TODO: import the dependencies

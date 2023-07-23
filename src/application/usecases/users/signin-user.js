@@ -1,25 +1,30 @@
+import { makeUser } from '../../../domain/entities'
+
 export default function signInUserUseCase({
     usersRepository,
     matchPassword,
     getSignedJwtToken,
     ErrorResponse,
 }) {
-    return async function signInUser(email, password) {
+    return async function signInUser({ email, password }) {
         if (!email || !password) {
             throw new ErrorResponse('Please provide an email and password', 400)
         }
 
-        const user = await usersRepository.findByEmail(email)
-        if (!user.id) {
+        const signedInUser = await usersRepository.findByEmail(email)
+        if (!signInUser) {
             throw new ErrorResponse('Invalid credentials', 401)
         }
 
-        const isMatch = await matchPassword(password, user.password)
+        const user = makeUser(signedInUser)
+
+        const isMatch = await matchPassword(password, user.getPassword())
         if (!isMatch) {
             throw new ErrorResponse('Invalid credentials', 401)
         }
+        console.log(user.getId())
 
-        const token = getSignedJwtToken(user.id)
+        const token = getSignedJwtToken(user.getId())
         return { token }
     }
 }

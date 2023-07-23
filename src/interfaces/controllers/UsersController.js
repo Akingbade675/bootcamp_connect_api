@@ -1,23 +1,23 @@
-import asyncHandler from '../utils/async'
-import userService from '../../application/usecases/user'
+import asyncHandler from '../middlewares/async'
+import userService from '../../application/usecases/users'
 
 export const register = asyncHandler(async (request, response) => {
     const { name, email, password, role } = request.body
 
-    await userService.registerUser({
+    const user = await userService.registerUser({
         name,
         email,
         role,
         password,
     })
 
-    response.json({ success: true })
+    response.json({ success: true, data: user })
 })
 
 export const login = asyncHandler(async (request, response) => {
     const { email, password } = request.body
 
-    const { token } = await userService.signInUser(email, password)
+    const { token } = await userService.signInUser({ email, password })
 
     const options = {
         expires: new Date(

@@ -9,65 +9,51 @@ export default function makeUsersRepository({ userDb }) {
     })
 
     async function insert(userInfo) {
-        const newUser = await userDb.create(userInfo)
-        return {
-            id: newUser._id,
-            name: newUser.name,
-            email: newUser.email,
-            role: newUser.role,
-        }
+        const result = await userDb.create({ ...userInfo })
+
+        return cleanUser(result)
     }
 
     async function findByEmail(email) {
-        const user = await userDb.findOne({ email })
-        return {
-            id: user._id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            password: user.password,
-        }
+        const result = await userDb.findOne({ email })
+
+        return cleanUser(result)
     }
 
     async function findById(id) {
-        const user = await userDb.findById(id)
-        return {
-            id: user._id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-        }
+        const result = await userDb.findById(id)
+
+        return cleanUser(result)
     }
 
     async function findAll() {
         const users = await userDb.find()
-        return users.map((user) => ({
-            id: user._id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-        }))
+        return users.map((user) => {
+            cleanUser(user)
+        })
     }
 
     async function removeById(id) {
-        const user = await userDb.findByIdAndRemove(id)
-        return {
-            id: user._id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-        }
+        const result = await userDb.findByIdAndRemove(id)
+
+        return cleanUser(result)
     }
 
-    async function update({ id, ...changes }) {
-        const updatedUser = await userDb.findByIdAndUpdate(id, changes, {
+    async function update(id, changes) {
+        const result = await userDb.findByIdAndUpdate(id, changes, {
             new: true,
         })
-        return {
-            id: updatedUser._id,
-            name: updatedUser.name,
-            email: updatedUser.email,
-            role: updatedUser.role,
-        }
+
+        return cleanUser(result)
     }
+}
+
+// renames _id to id and removes __v
+function cleanUser(user) {
+    if (!user) {
+        return null
+    }
+
+    const { _id: id, __v, ...remainingFields } = user.toObject()
+    return { id, ...remainingFields }
 }

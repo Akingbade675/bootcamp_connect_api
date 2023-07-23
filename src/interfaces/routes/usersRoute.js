@@ -4,9 +4,9 @@ import { protect } from '../middlewares/auth'
 
 const usersRouter = express.Router()
 
-router.post('/register', register)
-router.post('/login', login)
+usersRouter.post('/register', register)
+usersRouter.post('/login', login)
 
-router.get('/me', protect, getMe)
+usersRouter.get('/me', protect, getMe)
 
 export default usersRouter
