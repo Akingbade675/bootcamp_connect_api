@@ -1,5 +1,5 @@
-export default function makeGetBootcamps({ bootcampRepository }) {
+export default function makeGetBootcamps({ bootcampsRepository }) {
     return async function getBootcamps(query) {
-        return await bootcampRepository.advancedFind(query)
+        return await bootcampsRepository.advancedFind(query)
     }
 }

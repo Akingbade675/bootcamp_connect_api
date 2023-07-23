@@ -1,5 +1,5 @@
 export default function makeGetBootcampInRadius({
-    bootcampRepository,
+    bootcampsRepository,
     geocoder,
 }) {
     return async function getBootcampInRadius(zipcode, distance) {
@@ -8,7 +8,7 @@ export default function makeGetBootcampInRadius({
         const lng = loc[0].longitude
         const radius = distance / 3963
 
-        const bootcamps = await bootcampRepository.find({
+        const bootcamps = await bootcampsRepository.find({
             location: {
                 $geoWithin: { $centerSphere: [[lng, lat], radius] },
             },

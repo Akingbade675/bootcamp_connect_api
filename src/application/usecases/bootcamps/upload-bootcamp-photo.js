@@ -1,5 +1,5 @@
 export default function makeUploadBootcampPhoto({
-    bootcampRepository,
+    bootcampRepository: bootcampsRepository,
     parseFile,
     ErrorResponse,
 }) {
@@ -9,7 +9,7 @@ export default function makeUploadBootcampPhoto({
         currentUserId,
         currentUserRole
     ) {
-        const bootcamp = await bootcampRepository.findById(id)
+        const bootcamp = await bootcampsRepository.findById(id)
         if (!bootcamp) {
             throw new ErrorResponse(
                 `Bootcamp with id ${id} cannot be found`,
@@ -50,7 +50,7 @@ export default function makeUploadBootcampPhoto({
             }
         })
 
-        await bootcampRepository.update(id, { photo: fileName })
+        await bootcampsRepository.update(id, { photo: fileName })
         return fileName
     }
 }

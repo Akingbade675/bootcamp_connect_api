@@ -1,10 +1,12 @@
-export default function makeDeleteBootcamp({ bootcampRepository }) {
+export default function makeDeleteBootcamp({
+    bootcampRepository: bootcampsRepository,
+}) {
     return async function deleteBootcamp(
         bootcampId,
         currentUserId,
         currentUserRole
     ) {
-        const bootcamp = await bootcampRepository.findById(bootcampId)
+        const bootcamp = await bootcampsRepository.findById(bootcampId)
         if (!bootcamp) {
             throw new ErrorResponse(
                 `Bootcamp with id ${bootcampId} cannot be found`,
@@ -22,6 +24,6 @@ export default function makeDeleteBootcamp({ bootcampRepository }) {
             )
         }
 
-        await bootcampRepository.removeById(bootcampId)
+        await bootcampsRepository.removeById(bootcampId)
     }
 }

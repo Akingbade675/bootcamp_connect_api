@@ -1,5 +1,7 @@
+import { makeBootcamp } from '../../../domain/entities'
+
 export default function makeUpdateBootcamp({
-    bootcampRepository,
+    bootcampsRepository,
     ErrorResponse,
 }) {
     return async function updateBootcamp(
@@ -8,16 +10,18 @@ export default function makeUpdateBootcamp({
         currentUserId,
         currentUserRole
     ) {
-        const bootcamp = await bootcampRepository.findById(bootcampId)
-        if (!bootcamp) {
+        const existingBootcamp = await bootcampsRepository.findById(bootcampId)
+        if (!existingBootcamp) {
             throw new ErrorResponse(
                 `Bootcamp with id ${bootcampId} cannot be found`,
                 404
             )
         }
 
+        const bootcamp = makeBootcamp({ ...existingBootcamp, ...changes })
+
         if (
-            bootcamp.user.toString() !== currentUserId &&
+            bootcamp.getUser().toString() !== currentUserId &&
             currentUserRole !== 'admin'
         ) {
             throw new ErrorResponse(
@@ -26,6 +30,6 @@ export default function makeUpdateBootcamp({
             )
         }
 
-        return await bootcampRepository.update(bootcampId, changes)
+        return await bootcampsRepository.update(bootcampId, changes)
     }
 }
