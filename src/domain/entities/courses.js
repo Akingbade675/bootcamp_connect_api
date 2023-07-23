@@ -1,4 +1,4 @@
-export default function defineMakeCourse() {
+export default function defineMakeCourse({ ErrorResponse }) {
     return function makeCourse({
         title,
         description,

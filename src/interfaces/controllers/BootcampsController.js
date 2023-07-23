@@ -1,4 +1,4 @@
-import asyncHandler from '../utils/async'
+import asyncHandler from '../middlewares/async'
 import bootcampService from '../../application/usecases/bootcamps'
 
 export const getBootcamps = asyncHandler(async (request, response) => {

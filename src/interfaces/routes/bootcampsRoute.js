@@ -1,37 +1,36 @@
 import express from 'express'
-
-const bootcampsRouter = express.Router()
+import { protect, authorize } from '../middlewares/auth'
+import coursesRouter from './coursesRoute'
 import {
-    getbootcamps,
-    getbootcamp,
-    createbootcamp,
-    updatebootcamp,
-    deletebootcamp,
-    getBootcampInRadius,
+    getBootcamps,
+    getBootcamp,
+    createBootcamp,
+    updateBootcamp,
+    deleteBootcamp,
+    getBootcampsInRadius,
     uploadBootcampPhoto,
 } from '../controllers/BootcampsController'
 
-import { protect, authorize } from '../middleware/auth'
+const bootcampsRouter = express.Router()
 
-import coursesRouter from './coursesRoute'
 // Re-route into other resource router
-router.use('/:bootcampId/courses', coursesRouter)
+bootcampsRouter.use('/:bootcampId/courses', coursesRouter)
 
-router.route('/radius/:zipcode/:distance').get(getBootcampInRadius)
+bootcampsRouter.route('/radius/:zipcode/:distance').get(getBootcampsInRadius)
 
-router
+bootcampsRouter
     .route('/:id/photo')
     .put(protect, authorize('publisher', 'admin'), uploadBootcampPhoto)
 
-router
+bootcampsRouter
     .route('/')
-    .get(getbootcamps)
-    .post(protect, authorize('publisher', 'admin'), createbootcamp)
+    .get(getBootcamps)
+    .post(protect, authorize('publisher', 'admin'), createBootcamp)
 
-router
+bootcampsRouter
     .route('/:id')
-    .get(getbootcamp)
-    .put(protect, authorize('publisher', 'admin'), updatebootcamp)
-    .delete(protect, authorize('publisher', 'admin'), deletebootcamp)
+    .get(getBootcamp)
+    .put(protect, authorize('publisher', 'admin'), updateBootcamp)
+    .delete(protect, authorize('publisher', 'admin'), deleteBootcamp)
 
 export default bootcampsRouter

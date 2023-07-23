@@ -24,13 +24,14 @@ export const protect = asyncHandler(async (request, response, next) => {
 
     try {
         // Verify token
-        const decoded = signedToken().decode(token)
+        const { id } = signedToken().decode(token)
 
         // Get logged in user
-        request.user = await usersRepository.findById(decoded.id)
+        request.user = await usersRepository.findById(id)
 
         next()
     } catch (error) {
+        console.error(error)
         return next(
             new ErrorResponse('Not authorized to access this route', 401)
         )

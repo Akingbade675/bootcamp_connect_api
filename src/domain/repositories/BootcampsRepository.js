@@ -14,57 +14,33 @@ export default function makeBootcampRepository({ bootcampDb }) {
 
     async function insert(bootcampInfo) {
         const newBootcamp = await bootcampDb.create(bootcampInfo)
-        return {
-            id: newBootcamp._id,
-            name: newBootcamp.name,
-            description: newBootcamp.description,
-            website: newBootcamp.website,
-            phone: newBootcamp.phone,
-            email: newBootcamp.email,
-            address: newBootcamp.address,
-            careers: newBootcamp.careers,
-            housing: newBootcamp.housing,
-            jobAssistance: newBootcamp.jobAssistance,
-            jobGuarantee: newBootcamp.jobGuarantee,
-            acceptGi: newBootcamp.acceptGi,
-        }
+        return cleanBootcamp(newBootcamp)
     }
 
     async function findById(id) {
         const bootcamp = await bootcampDb.findById(id).populate('courses')
-        return {
-            id: bootcamp._id,
-            name: bootcamp.name,
-            description: bootcamp.description,
-            website: bootcamp.website,
-            phone: bootcamp.phone,
-            email: bootcamp.email,
-            address: bootcamp.address,
-            careers: bootcamp.careers,
-            housing: bootcamp.housing,
-            jobAssistance: bootcamp.jobAssistance,
-            jobGuarantee: bootcamp.jobGuarantee,
-            acceptGi: bootcamp.acceptGi,
-            courses: bootcamp.courses,
-        }
+
+        return cleanBootcamp(bootcamp)
+        // return {
+        //     id: bootcamp._id,
+        //     name: bootcamp.name,
+        //     description: bootcamp.description,
+        //     website: bootcamp.website,
+        //     phone: bootcamp.phone,
+        //     email: bootcamp.email,
+        //     address: bootcamp.address,
+        //     careers: bootcamp.careers,
+        //     housing: bootcamp.housing,
+        //     jobAssistance: bootcamp.jobAssistance,
+        //     jobGuarantee: bootcamp.jobGuarantee,
+        //     acceptGi: bootcamp.acceptGi,
+        //     courses: bootcamp.courses,
+        // }
     }
 
     async function findAll() {
         const bootcamps = await bootcampDb.find()
-        return bootcamps.map((bootcamp) => ({
-            id: bootcamp._id,
-            name: bootcamp.name,
-            description: bootcamp.description,
-            website: bootcamp.website,
-            phone: bootcamp.phone,
-            email: bootcamp.email,
-            address: bootcamp.address,
-            careers: bootcamp.careers,
-            housing: bootcamp.housing,
-            jobAssistance: bootcamp.jobAssistance,
-            jobGuarantee: bootcamp.jobGuarantee,
-            acceptGi: bootcamp.acceptGi,
-        }))
+        return bootcamps.map((bootcamp) => cleanBootcamp(bootcamp))
     }
 
     async function advancedFind(requestQuery) {
@@ -73,55 +49,19 @@ export default function makeBootcampRepository({ bootcampDb }) {
 
     async function findByQuery(query) {
         const bootcamps = await bootcampDb.find(query)
-        return bootcamps.map((bootcamp) => ({
-            id: bootcamp._id,
-            name: bootcamp.name,
-            description: bootcamp.description,
-            website: bootcamp.website,
-            phone: bootcamp.phone,
-            email: bootcamp.email,
-            address: bootcamp.address,
-            careers: bootcamp.careers,
-            housing: bootcamp.housing,
-            jobAssistance: bootcamp.jobAssistance,
-            jobGuarantee: bootcamp.jobGuarantee,
-            acceptGi: bootcamp.acceptGi,
-        }))
+        return bootcamps.map((bootcamp) => cleanBootcamp(bootcamp))
     }
 
     async function findOneByUserId(userId) {
         const bootcamp = await bootcampDb.findOne({ user: userId })
-        return {
-            id: bootcamp._id,
-            name: bootcamp.name,
-            description: bootcamp.description,
-            website: bootcamp.website,
-            phone: bootcamp.phone,
-            email: bootcamp.email,
-            address: bootcamp.address,
-            careers: bootcamp.careers,
-            housing: bootcamp.housing,
-            jobAssistance: bootcamp.jobAssistance,
-            jobGuarantee: bootcamp.jobGuarantee,
-        }
+
+        return cleanBootcamp(bootcamp)
     }
 
     async function removeById(id) {
         const bootcamp = await bootcampDb.findByIdAndRemove(id)
-        return {
-            id: bootcamp._id,
-            name: bootcamp.name,
-            description: bootcamp.description,
-            website: bootcamp.website,
-            phone: bootcamp.phone,
-            email: bootcamp.email,
-            address: bootcamp.address,
-            careers: bootcamp.careers,
-            housing: bootcamp.housing,
-            jobAssistance: bootcamp.jobAssistance,
-            jobGuarantee: bootcamp.jobGuarantee,
-            acceptGi: bootcamp.acceptGi,
-        }
+
+        return cleanBootcamp(bootcamp)
     }
 
     async function update(id, bootcampInfo) {
@@ -129,19 +69,17 @@ export default function makeBootcampRepository({ bootcampDb }) {
             new: true,
             runValidators: true,
         })
-        return {
-            id: bootcamp._id,
-            name: bootcamp.name,
-            description: bootcamp.description,
-            website: bootcamp.website,
-            phone: bootcamp.phone,
-            email: bootcamp.email,
-            address: bootcamp.address,
-            careers: bootcamp.careers,
-            housing: bootcamp.housing,
-            jobAssistance: bootcamp.jobAssistance,
-            jobGuarantee: bootcamp.jobGuarantee,
-            acceptGi: bootcamp.acceptGi,
-        }
+
+        return cleanBootcamp(bootcamp)
     }
+}
+
+// renames _id to id and removes __v
+function cleanBootcamp(bootcamp) {
+    if (!bootcamp) {
+        return null
+    }
+
+    const { _id: id, __v, ...found } = bootcamp.toObject()
+    return { id, ...found }
 }

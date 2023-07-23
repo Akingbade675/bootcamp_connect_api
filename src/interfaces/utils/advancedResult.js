@@ -1,4 +1,4 @@
-export default advancedResult = async (model, requestQuery, populate) => {
+const advancedResult = async (model, requestQuery, populate) => {
     let query
 
     // Copy requestQuery
@@ -70,3 +70,5 @@ export default advancedResult = async (model, requestQuery, populate) => {
         data: result,
     }
 }
+
+export default advancedResult
