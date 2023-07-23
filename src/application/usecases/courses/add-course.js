@@ -2,7 +2,8 @@ import { makeCourse } from '../../../domain/entities'
 
 export default function addCourseUseCase({
     coursesRepository,
-    bootcampRepository,
+
+    bootcampsRepository,
     ErrorResponse,
 }) {
     return async function addCourse(
@@ -17,7 +18,7 @@ export default function addCourseUseCase({
         // validates the fields
         makeCourse(courseData)
 
-        const bootcamp = await bootcampRepository.findById(bootcampId)
+        const bootcamp = await bootcampsRepository.findById(bootcampId)
         if (!bootcamp) {
             throw new ErrorResponse(
                 `No bootcamp with the id of ${bootcampId}`,

@@ -1,5 +1,5 @@
-import asyncHandler from '../utils/async'
-import courseService from '../../application/usecases/course'
+import asyncHandler from '../middlewares/async'
+import courseService from '../../application/usecases/courses'
 
 export const addCourse = asyncHandler(async (req, res) => {
     const { bootcampId } = req.params
@@ -10,31 +10,9 @@ export const addCourse = asyncHandler(async (req, res) => {
 
 export const getCourses = asyncHandler(async (req, res) => {
     const { bootcampId } = req.params
-    const result = await courseService.getCourses(bootcampId, req.query)
+    const responseData = await courseService.getCourses(bootcampId, req.query)
 
-    let returnObject = {}
-    if (bootcampId) {
-        // if bootcampId is present, return the courses of that bootcamp
-        returnObject = {
-            success: true,
-            count: result.length,
-            data: result,
-        }
-    } else {
-        /**
-         * if bootcampId is not present,
-         * use the advancedResult function that
-         * returns an object with courses and pagination
-         * e.g { pagination: {}, data: [] }
-         */
-        returnObject = {
-            success: true,
-            count: result['data'].length,
-            pagination: result['pagination'],
-            data: result['data'],
-        }
-    }
-    res.status(200).json(returnObject)
+    res.status(200).json(responseData)
 })
 
 export const getCourse = asyncHandler(async (req, res) => {

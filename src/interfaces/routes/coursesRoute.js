@@ -1,33 +1,24 @@
 import express from 'express'
-const coursesRouter = express.Router({ mergeParams: true })
-const {
+import { protect, authorize } from '../middlewares/auth'
+import {
     getCourses,
     getCourse,
     addCourse,
-    updatecourse,
+    updateCourse,
     deleteCourse,
-} = require('../controllers/courses')
+} from '../controllers/CoursesController'
 
-const { protect, authorize } = require('../middleware/auth')
-const advancedResult = require('../middleware/advancedResult')
-const Courses = require('../models/Course')
+const coursesRouter = express.Router({ mergeParams: true })
 
-router
+coursesRouter
     .route('/')
-    .get(
-        advancedResult(Courses, {
-            path: 'bootcamp',
-            // select: 'name description' OR
-            select: { name: 1, description: 1 },
-        }),
-        getCourses
-    )
+    .get(getCourses)
     .post(protect, authorize('publisher', 'admin'), addCourse)
 
-router
+coursesRouter
     .route('/:id')
     .get(getCourse)
-    .put(protect, updatecourse)
+    .put(protect, authorize('publisher', 'admin'), updateCourse)
     .delete(protect, authorize('publisher', 'admin'), deleteCourse)
 
 export default coursesRouter

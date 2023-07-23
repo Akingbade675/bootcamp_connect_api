@@ -4,5 +4,7 @@ export default function getCourseUseCase({ coursesRepository, ErrorResponse }) {
         if (!course) {
             throw new ErrorResponse(`No course with the id of ${courseId}`, 404)
         }
+
+        return course
     }
 }

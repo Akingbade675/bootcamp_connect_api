@@ -12,46 +12,22 @@ export default function makeCoursesRepository({ courseDb }) {
 
     async function insert(courseInfo) {
         const newCourse = await courseDb.create(courseInfo)
-        return {
-            id: newCourse._id,
-            title: newCourse.title,
-            description: newCourse.description,
-            weeks: newCourse.weeks,
-            tuition: newCourse.tuition,
-            minimumSkill: newCourse.minimumSkill,
-            scholarhipsAvailable: newCourse.scholarhipsAvailable,
-            bootcamp: newCourse.bootcamp,
-        }
+
+        return cleanCourse(newCourse)
     }
 
     async function findById(id) {
         const course = await courseDb
             .findById(id)
             .populate({ path: 'bootcamp', select: 'name description' })
-        return {
-            id: course._id,
-            title: course.title,
-            description: course.description,
-            weeks: course.weeks,
-            tuition: course.tuition,
-            minimumSkill: course.minimumSkill,
-            scholarhipsAvailable: course.scholarhipsAvailable,
-            bootcamp: course.bootcamp,
-        }
+
+        return cleanCourse(course)
     }
 
     async function findByBootcampId(bootcampId) {
         const courses = await courseDb.find({ bootcamp: bootcampId })
-        return courses.map((course) => ({
-            id: course._id,
-            title: course.title,
-            description: course.description,
-            weeks: course.weeks,
-            tuition: course.tuition,
-            minimumSkill: course.minimumSkill,
-            scholarhipsAvailable: course.scholarhipsAvailable,
-            bootcamp: course.bootcamp,
-        }))
+        const cleanedCourses = courses.map((course) => cleanCourse(course))
+        return cleanedCourses
     }
 
     async function advancedFind(requestQuery) {
@@ -62,7 +38,9 @@ export default function makeCoursesRepository({ courseDb }) {
     }
 
     async function removeById(id) {
-        return await courseDb.findByIdAndRemove(id)
+        const removedCourse = await courseDb.findByIdAndRemove(id)
+
+        return cleanCourse(removedCourse)
     }
 
     async function update(id, courseInfo) {
@@ -70,15 +48,17 @@ export default function makeCoursesRepository({ courseDb }) {
             new: true,
             runValidators: true,
         })
-        return {
-            id: course._id,
-            title: course.title,
-            description: course.description,
-            weeks: course.weeks,
-            tuition: course.tuition,
-            minimumSkill: course.minimumSkill,
-            scholarhipsAvailable: course.scholarhipsAvailable,
-            bootcamp: course.bootcamp,
-        }
+
+        return cleanCourse(course)
     }
+}
+
+// renames _id to id and removes __v
+function cleanCourse(course) {
+    if (!course) {
+        return null
+    }
+
+    const { _id: id, __v, ...remainingFields } = course.toObject()
+    return { id, ...remainingFields }
 }

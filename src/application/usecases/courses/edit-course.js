@@ -1,21 +1,25 @@
+import { makeCourse } from '../../../domain/entities'
+
 export default function editCourseUseCase({
     coursesRepository,
     ErrorResponse,
 }) {
     return async function editCourse(
         courseId,
-        courseInfo,
+        changes,
         currentUserId,
         currentUserRole
     ) {
-        const course = await coursesRepository.findById(courseId)
-        if (!course) {
+        const existingCourse = await coursesRepository.findById(courseId)
+        if (!existingCourse) {
             throw new ErrorResponse(`No course with the id of ${courseId}`, 404)
         }
 
+        const course = makeCourse({ ...existingCourse, ...changes })
+
         // Make sure user is course owner or admin
         if (
-            course.user.toString() !== currentUserId &&
+            course.getUser().toString() !== currentUserId &&
             currentUserRole !== 'admin'
         ) {
             throw new ErrorResponse(
@@ -24,10 +28,7 @@ export default function editCourseUseCase({
             )
         }
 
-        const updatedCourse = await coursesRepository.update(
-            courseId,
-            courseInfo
-        )
+        const updatedCourse = await coursesRepository.update(courseId, changes)
 
         return updatedCourse
     }

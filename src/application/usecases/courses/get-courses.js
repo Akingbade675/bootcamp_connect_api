@@ -1,9 +1,20 @@
 export default function getCourses({ coursesRepository }) {
     return async function getCourses(bootcampId = null, query = {}) {
         if (bootcampId) {
-            return await coursesRepository.findByBootcampId(bootcampId)
+            const result = await coursesRepository.findByBootcampId(bootcampId)
+            return {
+                success: true,
+                count: result.length,
+                data: result,
+            }
         }
 
-        return await coursesRepository.advancedFind(query)
+        const result = await coursesRepository.advancedFind(query)
+        return {
+            success: true,
+            count: result['data'].length,
+            pagination: result['pagination'],
+            data: result['data'],
+        }
     }
 }
