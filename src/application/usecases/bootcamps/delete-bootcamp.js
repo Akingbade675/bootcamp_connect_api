@@ -1,6 +1,4 @@
-export default function makeDeleteBootcamp({
-    bootcampRepository: bootcampsRepository,
-}) {
+export default function makeDeleteBootcamp({ bootcampsRepository }) {
     return async function deleteBootcamp(
         bootcampId,
         currentUserId,

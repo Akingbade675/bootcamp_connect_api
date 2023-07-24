@@ -1,6 +1,7 @@
 import express from 'express'
 import { protect, authorize } from '../middlewares/auth'
 import coursesRouter from './coursesRoute'
+import reviewsRouter from './reviewsRoute'
 import {
     getBootcamps,
     getBootcamp,
@@ -15,6 +16,7 @@ const bootcampsRouter = express.Router()
 
 // Re-route into other resource router
 bootcampsRouter.use('/:bootcampId/courses', coursesRouter)
+bootcampsRouter.use('/:bootcampId/reviews', reviewsRouter)
 
 bootcampsRouter.route('/radius/:zipcode/:distance').get(getBootcampsInRadius)
 

@@ -1,5 +1,5 @@
 export default function makeUploadBootcampPhoto({
-    bootcampRepository: bootcampsRepository,
+    bootcampsRepository,
     parseFile,
     ErrorResponse,
 }) {

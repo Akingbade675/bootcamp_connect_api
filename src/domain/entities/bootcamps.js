@@ -33,47 +33,58 @@ export default function defineMakeBootcamp({ slugify, ErrorResponse }) {
         courses,
     } = {}) {
         if (!name) {
-            throw new ErrorResponse('Please add a name', 400)
+            throw new ErrorResponse('Bootcamp must have a name', 400)
         }
 
         if (!description) {
-            throw new ErrorResponse('Please add a description', 400)
+            throw new ErrorResponse('Bootcamp must have a description', 400)
         }
 
         if (website && !websiteRegex.test(website)) {
             throw new ErrorResponse(
-                'Please use a valid URL with HTTP or HTTPS',
+                'Bootcamp must have a valid website URL',
                 400
             )
         }
 
         if (phone && (phone.length < 10 || phone.length > 20)) {
-            throw new ErrorResponse('Please add a valid phone number', 400)
+            throw new ErrorResponse(
+                'Bootcamp phone must be between 10 and 20 characters',
+                400
+            )
         }
 
         if (email && !emailRegex.test(email)) {
-            throw new ErrorResponse('Please add an email', 400)
+            throw new ErrorResponse('Bootcamp must have a valid email', 400)
         }
 
         if (!address) {
-            throw new ErrorResponse('Please add an address', 400)
+            throw new ErrorResponse('Bootcamp must have an address', 400)
         }
 
         if (careers.length === 0) {
-            throw new ErrorResponse('Please add a career', 400)
+            throw new ErrorResponse(
+                'Bootcamp must have at least one career',
+                400
+            )
         }
 
         careers.forEach((career) => {
             if (!REQUIRED_CAREERS.includes(career)) {
                 throw new ErrorResponse(
-                    `Please add a valid career: ${REQUIRED_CAREERS.join(', ')}`,
+                    `Bootcamp career must be one of the following: ${REQUIRED_CAREERS.join(
+                        ', '
+                    )}`,
                     400
                 )
             }
         })
 
         if (averageRating && (averageRating < 1 || averageRating > 10)) {
-            throw new ErrorResponse('Rating must be between 1 and 10', 400)
+            throw new ErrorResponse(
+                'Bootcamp average rating must be between 1 and 10',
+                400
+            )
         }
 
         if (!user) {
