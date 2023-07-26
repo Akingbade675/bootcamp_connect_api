@@ -5,7 +5,7 @@ import colors from 'colors'
 import fileupload from 'express-fileupload'
 import path from 'path'
 import cookieParser from 'cookie-parser'
-import connectDB from './config/db'
+import connectDB from './src/infrastructure/externalServices/db'
 
 dotenv.config({ path: './config/config.env' })
 
