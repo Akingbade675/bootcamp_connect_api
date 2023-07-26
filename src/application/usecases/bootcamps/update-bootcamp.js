@@ -10,18 +10,16 @@ export default function makeUpdateBootcamp({
         currentUserId,
         currentUserRole
     ) {
-        const existingBootcamp = await bootcampsRepository.findById(bootcampId)
-        if (!existingBootcamp) {
+        const bootcamp = await bootcampsRepository.findById(bootcampId)
+        if (!bootcamp) {
             throw new ErrorResponse(
                 `Bootcamp with id ${bootcampId} cannot be found`,
                 404
             )
         }
 
-        const bootcamp = makeBootcamp({ ...existingBootcamp, ...changes })
-
         if (
-            bootcamp.getUser().toString() !== currentUserId &&
+            bootcamp.user.toString() !== currentUserId &&
             currentUserRole !== 'admin'
         ) {
             throw new ErrorResponse(

@@ -1,15 +1,18 @@
 import { makeUser } from '../../../domain/entities'
 
-export default function registerUserUseCase({ userRepository, ErrorResponse }) {
+export default function registerUserUseCase({
+    usersRepository,
+    ErrorResponse,
+}) {
     return async function registerUser(userData) {
         const user = makeUser(userData)
 
-        const existingUser = await userRepository.findByEmail(user.getEmail())
+        const existingUser = await usersRepository.findByEmail(user.getEmail())
         if (existingUser) {
             throw new ErrorResponse('User already exists', 400)
         }
 
-        const result = await userRepository.insert({
+        const result = await usersRepository.insert({
             name: user.getName(),
             email: user.getEmail(),
             password: user.getPassword(),

@@ -6,17 +6,16 @@ export default function addCourseUseCase({
     bootcampsRepository,
     ErrorResponse,
 }) {
-    return async function addCourse(
+    return async function addCourse({
         bootcampId,
         courseData,
         currentUserId,
-        currentUserRole
-    ) {
-        courseData.bootcamp = bootcampId
+        currentUserRole,
+    }) {
         courseData.user = currentUserId
-
+        courseData.bootcamp = bootcampId
         // validates the fields
-        makeCourse(courseData)
+        makeCourse({ ...courseData })
 
         const bootcamp = await bootcampsRepository.findById(bootcampId)
         if (!bootcamp) {

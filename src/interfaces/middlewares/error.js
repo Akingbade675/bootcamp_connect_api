@@ -8,7 +8,10 @@ const errorHandler = (err, req, res, next) => {
     // console.log(err);
 
     if (err.name === 'CastError') {
-        const message = `Bootcamp with id ${err.value} cannot be found`
+        // Gets the db model name
+        const resource = err['model']['collection']['modelName']
+        console.log(resource)
+        const message = `${resource} with the id ${err.value} cannot be found`
         error = new ErrorResponse(message, 404)
     }
 

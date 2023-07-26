@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+    bootcamp_connect_api:
+        image: cleanarchitecturebootcampapi
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        container_name: bootcamp_connect_api
+        restart: unless-stopped
+        hostname: bootcamp_connect_api
+        environment:
+            NODE_ENV: production
+        ports:
+            - 5000:5000
+        networks:
+            - bootcamp_connect_network
+
+    nginx:
+        image: nginx:latest
+        hostname: bootcamp_connect_nginx
+        container_name: bootcamp_connect_nginx
+        restart: unless-stopped
+        ports:
+            - 80:80
+        depends_on:
+            - bootcamp_connect_api
+        volumes:
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf
+        networks:
+            - bootcamp_connect_network

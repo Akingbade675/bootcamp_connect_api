@@ -4,7 +4,15 @@ import courseService from '../../application/usecases/courses'
 export const addCourse = asyncHandler(async (req, res) => {
     const { bootcampId } = req.params
     const courseData = req.body
-    const course = await courseService.addCourse(bootcampId, courseData)
+    const currentUserId = req.user.id
+    const currentUserRole = req.user.role
+
+    const course = await courseService.addCourse({
+        bootcampId,
+        courseData,
+        currentUserId,
+        currentUserRole,
+    })
     res.status(201).json({ success: true, data: course })
 })
 
@@ -29,12 +37,12 @@ export const updateCourse = asyncHandler(async (req, res) => {
     const currentUserId = req.user.id
     const currentUserRole = req.user.role
 
-    const updatedCourse = await courseService.editCourse(
+    const updatedCourse = await courseService.editCourse({
         courseId,
         courseData,
         currentUserId,
-        currentUserRole
-    )
+        currentUserRole,
+    })
     res.status(200).json({ success: true, data: updatedCourse })
 })
 
@@ -43,7 +51,11 @@ export const deleteCourse = asyncHandler(async (req, res) => {
     const currentUserId = req.user.id
     const currentUserRole = req.user.role
 
-    await courseService.deleteCourse(courseId, currentUserId, currentUserRole)
+    await courseService.deleteCourse({
+        courseId,
+        currentUserId,
+        currentUserRole,
+    })
 
     res.status(200).json({ success: true, data: {} })
 })

@@ -71,8 +71,15 @@ export const getBootcampsInRadius = asyncHandler(async (request, response) => {
 
 export const uploadBootcampPhoto = asyncHandler(async (request, response) => {
     const bootcampId = request.params.id
-    const file = request.files.file
+    const { files } = request
+    const currentUserId = request.user.id
+    const currentUserRole = request.user.role
 
-    const fileName = await bootcampService.uploadBootcampPhoto(bootcampId, file)
+    const fileName = await bootcampService.uploadBootcampPhoto({
+        bootcampId,
+        files,
+        currentUserId,
+        currentUserRole,
+    })
     response.json({ success: true, data: fileName })
 })

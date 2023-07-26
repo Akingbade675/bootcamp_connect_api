@@ -3,16 +3,22 @@ export default function makeUploadBootcampPhoto({
     parseFile,
     ErrorResponse,
 }) {
-    return async function uploadBootcampPhoto(
-        id,
-        file,
+    return async function uploadBootcampPhoto({
+        bootcampId,
+        files,
         currentUserId,
-        currentUserRole
-    ) {
-        const bootcamp = await bootcampsRepository.findById(id)
+        currentUserRole,
+    }) {
+        if (!files) {
+            throw new ErrorResponse('Please upload a file', 400)
+        }
+
+        const file = files.file
+
+        const bootcamp = await bootcampsRepository.findById(bootcampId)
         if (!bootcamp) {
             throw new ErrorResponse(
-                `Bootcamp with id ${id} cannot be found`,
+                `Bootcamp with id ${bootcampId} cannot be found`,
                 404
             )
         }
@@ -27,10 +33,6 @@ export default function makeUploadBootcampPhoto({
             )
         }
 
-        if (!file) {
-            throw new ErrorResponse('Please upload a file', 400)
-        }
-
         if (!file.mimetype.startsWith('image')) {
             throw new ErrorResponse('Please upload an image file', 400)
         }
@@ -42,7 +44,7 @@ export default function makeUploadBootcampPhoto({
             )
         }
 
-        const fileName = `photo_${id}${parseFile(file.name)}`
+        const fileName = `photo_${bootcampId}${parseFile(file.name)}`
 
         file.mv(`${process.env.FILE_UPLOAD_PATH}/${fileName}`, async (err) => {
             if (err) {
@@ -50,7 +52,7 @@ export default function makeUploadBootcampPhoto({
             }
         })
 
-        await bootcampsRepository.update(id, { photo: fileName })
+        await bootcampsRepository.update(bootcampId, { photo: fileName })
         return fileName
     }
 }

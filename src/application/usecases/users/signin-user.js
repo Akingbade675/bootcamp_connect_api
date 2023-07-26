@@ -12,7 +12,7 @@ export default function signInUserUseCase({
         }
 
         const signedInUser = await usersRepository.findByEmail(email)
-        if (!signInUser) {
+        if (!signedInUser) {
             throw new ErrorResponse('Invalid credentials', 401)
         }
 
@@ -22,7 +22,6 @@ export default function signInUserUseCase({
         if (!isMatch) {
             throw new ErrorResponse('Invalid credentials', 401)
         }
-        console.log(user.getId())
 
         const token = getSignedJwtToken(user.getId())
         return { token }

@@ -1,21 +1,27 @@
-export default function makeRemoveReview({ reviewsDb, ErrorResponse }) {
-    return async function removeReview({ reviewId, currentUserId }) {
+export default function makeRemoveReview({ reviewsRepository, ErrorResponse }) {
+    return async function removeReview({
+        reviewId,
+        currentUserId,
+        currentUserRole,
+    }) {
         if (!reviewId) {
             throw new ErrorResponse('You must supply a review id.', 400)
         }
-        const existingReview = await reviewsDb.findById({ id: reviewId })
+        const existingReview = await reviewsRepository.findById({
+            id: reviewId,
+        })
 
         if (!existingReview) {
             throw new ErrorResponse(`No review with the id of ${reviewId}`, 404)
         }
 
         if (
-            existingReview.getUser().toString() !== currentUserId &&
-            currentUserId !== 'admin'
+            existingReview.user.toString() !== currentUserId.toString() &&
+            currentUserRole !== 'admin'
         ) {
             throw new ErrorResponse(`Not authorized to update this review`, 401)
         }
 
-        return await reviewsDb.remove(reviewId)
+        return await reviewsRepository.remove(reviewId)
     }
 }

@@ -2,9 +2,10 @@ export default function makeReviewsRepository({ reviewDb }) {
     return Object.freeze({
         insert,
         findById,
+        findByBootcampId,
         findByBootcampIdAndUserId,
         findAll,
-        removeById,
+        remove,
         update,
     })
 
@@ -14,10 +15,16 @@ export default function makeReviewsRepository({ reviewDb }) {
         return cleanReview(result)
     }
 
-    async function findById(id) {
+    async function findById({ id }) {
         const result = await reviewDb.findById(id)
 
         return cleanReview(result)
+    }
+
+    async function findByBootcampId({ bootcampId }) {
+        const reviews = await reviewDb.find({ bootcamp: bootcampId })
+
+        return reviews.map((review) => cleanReview(review))
     }
 
     async function findByBootcampIdAndUserId({ bootcampId, userId }) {
@@ -31,17 +38,15 @@ export default function makeReviewsRepository({ reviewDb }) {
 
     async function findAll() {
         const reviews = await reviewDb.find()
-        return reviews.map((review) => {
-            cleanReview(review)
-        })
+        return reviews.map((review) => cleanReview(review))
     }
 
-    async function removeById(id) {
+    async function remove(id) {
         const result = await reviewDb.findByIdAndRemove(id)
         return cleanReview(result)
     }
 
-    async function update(id, userId, changes) {
+    async function update({ id, ...changes }) {
         const result = await reviewDb.findByIdAndUpdate(id, changes, {
             new: true,
             runValidators: true,

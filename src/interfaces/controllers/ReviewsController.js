@@ -3,8 +3,13 @@ import reviewService from '../../application/usecases/reviews'
 
 export const addReview = asyncHandler(async (req, res) => {
     const { bootcampId } = req.params
+    const currentUserId = req.user.id
     const reviewData = req.body
-    const review = await reviewService.addReview(bootcampId, reviewData)
+    const review = await reviewService.addReview({
+        bootcampId,
+        currentUserId,
+        ...reviewData,
+    })
     res.status(201).json({ success: true, data: review })
 })
 
@@ -33,12 +38,12 @@ export const updateReview = asyncHandler(async (req, res) => {
     const currentUserId = req.user.id
     const currentUserRole = req.user.role
 
-    const updatedReview = await reviewService.editReview(
+    const updatedReview = await reviewService.editReview({
         reviewId,
-        reviewData,
         currentUserId,
-        currentUserRole
-    )
+        currentUserRole,
+        ...reviewData,
+    })
     res.status(200).json({ success: true, data: updatedReview })
 })
 
@@ -47,7 +52,11 @@ export const deleteReview = asyncHandler(async (req, res) => {
     const currentUserId = req.user.id
     const currentUserRole = req.user.role
 
-    await reviewService.deleteReview(reviewId, currentUserId, currentUserRole)
+    await reviewService.deleteReview({
+        reviewId,
+        currentUserId,
+        currentUserRole,
+    })
 
     res.status(200).json({ success: true, data: {} })
 })

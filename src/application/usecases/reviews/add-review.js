@@ -1,8 +1,8 @@
 import { makeReview } from '../../../domain/entities'
 
 export default function makeAddReview({
-    bootcampsDb,
-    reviewsDb,
+    bootcampsRepository,
+    reviewsRepository,
     ErrorResponse,
 }) {
     return async function addReview({
@@ -14,7 +14,7 @@ export default function makeAddReview({
             throw new ErrorResponse('You must supply a bootcamp id.', 400)
         }
 
-        const bootcamp = await bootcampsDb.findById({ id: bootcampId })
+        const bootcamp = await bootcampsRepository.findById(bootcampId)
 
         if (!bootcamp) {
             throw new ErrorResponse(
@@ -30,10 +30,11 @@ export default function makeAddReview({
             )
         }
 
-        const existingReview = await reviewsDb.findByBootcampIdAndUserId({
-            bootcampId,
-            userId: currentUserId,
-        })
+        const existingReview =
+            await reviewsRepository.findByBootcampIdAndUserId({
+                bootcampId,
+                userId: currentUserId,
+            })
 
         if (existingReview) {
             throw new ErrorResponse(
@@ -42,13 +43,14 @@ export default function makeAddReview({
             )
         }
 
+        console.log('reviewInfo', reviewInfo)
         const review = makeReview({
             ...reviewInfo,
             bootcamp: bootcampId,
             user: currentUserId,
         })
 
-        const addedReview = await reviewsDb.insert({
+        const addedReview = await reviewsRepository.insert({
             title: review.getTitle(),
             text: review.getText(),
             rating: review.getRating(),

@@ -2,11 +2,11 @@ export default function deleteCourseUseCase({
     coursesRepository,
     ErrorResponse,
 }) {
-    return async function deleteCourse(
+    return async function deleteCourse({
         courseId,
         currentUserId,
-        currentUserRole
-    ) {
+        currentUserRole,
+    }) {
         const course = await coursesRepository.findById(courseId)
         if (!course) {
             throw new ErrorResponse(`No course with the id of ${courseId}`, 404)
@@ -23,6 +23,6 @@ export default function deleteCourseUseCase({
             )
         }
 
-        return await coursesRepository.remove(courseId)
+        return await coursesRepository.removeById(courseId)
     }
 }

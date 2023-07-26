@@ -15,6 +15,7 @@ import logger from './src/interfaces/middlewares/logger'
 import usersRouter from './src/interfaces/routes/usersRoute'
 import bootcampsRouter from './src/interfaces/routes/bootcampsRoute'
 import coursesRouter from './src/interfaces/routes/coursesRoute'
+import reviewsRouter from './src/interfaces/routes/reviewsRoute'
 
 connectDB()
 
@@ -44,6 +45,7 @@ app.use(logger)
 app.use('/api/v1/users', usersRouter)
 app.use('/api/v1/bootcamps', bootcampsRouter)
 app.use('/api/v1/courses', coursesRouter)
+app.use('/api/v1/reviews', reviewsRouter)
 
 // Error(from routers) handler middleware
 app.use(errorHandler)

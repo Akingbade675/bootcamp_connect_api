@@ -2,7 +2,6 @@ import express from 'express'
 import { protect, authorize } from '../middlewares/auth'
 import {
     getReviews,
-    getReview,
     addReview,
     updateReview,
     deleteReview,

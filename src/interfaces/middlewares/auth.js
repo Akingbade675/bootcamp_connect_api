@@ -27,7 +27,8 @@ export const protect = asyncHandler(async (request, response, next) => {
         const { id } = signedToken().decode(token)
 
         // Get logged in user
-        request.user = await usersRepository.findById(id)
+        const user = await usersRepository.findById(id)
+        request.user = JSON.parse(JSON.stringify(user))
 
         next()
     } catch (error) {

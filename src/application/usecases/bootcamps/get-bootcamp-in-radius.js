@@ -8,7 +8,7 @@ export default function makeGetBootcampInRadius({
         const lng = loc[0].longitude
         const radius = distance / 3963
 
-        const bootcamps = await bootcampsRepository.find({
+        const bootcamps = await bootcampsRepository.findByQuery({
             location: {
                 $geoWithin: { $centerSphere: [[lng, lat], radius] },
             },

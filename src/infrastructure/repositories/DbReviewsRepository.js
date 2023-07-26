@@ -1,5 +1,5 @@
-export default function makeReviewDb({ monngoose }) {
-    const ReviewSchema = new monngoose.Schema({
+export default function makeReviewDb({ mongoose }) {
+    const ReviewSchema = new mongoose.Schema({
         title: {
             type: String,
             trim: true,
@@ -18,12 +18,12 @@ export default function makeReviewDb({ monngoose }) {
             required: [true, 'Please add a rating between 1 and 10'],
         },
         bootcamp: {
-            type: monngoose.Schema.ObjectId,
+            type: mongoose.Schema.ObjectId,
             ref: 'Bootcamp',
             required: true,
         },
         user: {
-            type: monngoose.Schema.ObjectId,
+            type: mongoose.Schema.ObjectId,
             ref: 'User',
             required: true,
         },
@@ -35,5 +35,5 @@ export default function makeReviewDb({ monngoose }) {
 
     ReviewSchema.index({ bootcamp: 1, user: 1 }, { unique: true })
 
-    return monngoose.model('Review', ReviewSchema)
+    return mongoose.model('Review', ReviewSchema)
 }
