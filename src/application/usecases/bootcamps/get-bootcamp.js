@@ -1,5 +1,6 @@
 export default function makeGetBootcamp({
     bootcampsRepository,
+    coursesRepository,
     ErrorResponse,
 }) {
     return async function getBootcamp(bootcampId) {
@@ -10,6 +11,10 @@ export default function makeGetBootcamp({
                 404
             )
         }
+
+        bootcamp['courses'] = await coursesRepository.findByBootcampId(
+            bootcampId
+        )
         return bootcamp
     }
 }

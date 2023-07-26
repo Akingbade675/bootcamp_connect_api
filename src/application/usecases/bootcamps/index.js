@@ -1,4 +1,7 @@
-import { bootcampsRepository } from '../../../domain/repositories'
+import {
+    bootcampsRepository,
+    coursesRepository,
+} from '../../../domain/repositories'
 import ErrorResponse from '../../../interfaces/utils/errorResponse'
 import geocoder from '../../../infrastructure/externalServices/geocoder'
 import parseFile from '../../../infrastructure/externalServices/parseFile'
@@ -10,7 +13,11 @@ import makeDeleteBootcamp from './delete-bootcamp'
 import makeGetBootcampsInRadius from './get-bootcamp-in-radius'
 import makeUploadBootcampPhoto from './upload-bootcamp-photo'
 
-const getBootcamp = makeGetBootcamp({ bootcampsRepository, ErrorResponse })
+const getBootcamp = makeGetBootcamp({
+    bootcampsRepository,
+    coursesRepository,
+    ErrorResponse,
+})
 const getBootcamps = makeGetBootcamps({
     bootcampsRepository,
 })

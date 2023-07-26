@@ -1,131 +1,98 @@
-Clean Architecture Bootcamp API
-This is the README file for the Clean Architecture Bootcamp API codebase. This API provides functionalities for users, publishers, and admins to manage bootcamps, courses, reviews, and users.
+<p align="center">
+  <a href="" rel="noopener">
+ <img width=200px height=200px src="https://i.imgur.com/6wj0hh6.jpg" alt="Project logo"></a>
+</p>
 
-Getting Started
-To get started with the API, follow the steps below:
+<h3 align="center">bootcamp_connect_api</h3>
 
-Clone the repository:
-git clone <repository-url>
-Install the dependencies:
-npm install
-Set up the environment variables by creating a
-.env
-file in the root directory and adding the necessary variables.
-Start the server:
-npm start
-Functionality
-Users
-Register
-Endpoint:
-POST /api/v1/users/register
-Description: Allows users to register by providing their name, email, password, and role.
-Access: Public
-Login
-Endpoint:
-POST /api/v1/users/login
-Description: Allows users to login by providing their email and password.
-Access: Public
-Get User Profile
-Endpoint:
-GET /api/v1/users/profile
-Description: Retrieves the profile of the authenticated user.
-Access: Private
-Update User Profile
-Endpoint:
-PUT /api/v1/users/profile
-Description: Updates the profile of the authenticated user.
-Access: Private
-Reset Password
-Endpoint:
-POST /api/v1/users/reset-password
-Description: Sends a reset password email to the user's email address.
-Access: Public
-Bootcamps
-Get All Bootcamps
-Endpoint:
+<div align="center">
+
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+[![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/pulls)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+
+</div>
+
+---
+
+<p align="center"> 
+    <br> 
+</p>
+
+## 📝 Table of Contents
+
+-   [About](#about)
+-   [Getting Started](#getting_started)
+-   [Deployment](#deployment)
+-   [Usage](#usage)
+-   [Built Using](#built_using)
+-   [TODO](../TODO.md)
+-   [Contributing](../CONTRIBUTING.md)
+-   [Authors](#authors)
+-   [Acknowledgments](#acknowledgement)
+
+## 🧐 About <a name = "about"></a>
+
+Bootcamp Connect API is a backend web application that serves as the core of the Bootcamp Connect platform. It provides RESTful APIs to handle user authentication, bootcamp management, and course associations. The API supports role-based access control, allowing publishers and admins to manage bootcamps and courses efficiently.
+
+The project is designed using Clean Architecture principles, ensuring maintainable and scalable code. It aims to connect users with nearby bootcamps offering various courses, providing a seamless learning experience.
+
+## 🏁 Getting Started <a name = "getting_started"></a>
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
+
+```
+Clone the repository: `git clone <repository_url>`
+Install dependencies: npm install
+Set up your MongoDB database and configure the connection in config/config.env
+Run the application: npm start
+```
+
+### API Endpoints
+
+What things you need to install the software and how to install them.
+
+```
+***Authentication***
+
+POST /api/v1/auth/register
+POST /api/v1/auth/login
+GET /api/v1/auth/me
+
+***Bootcamps***
+
 GET /api/v1/bootcamps
-Description: Retrieves all bootcamps.
-Access: Public
-Get Single Bootcamp
-Endpoint:
 GET /api/v1/bootcamps/:id
-Description: Retrieves a single bootcamp by its ID.
-Access: Public
-Create Bootcamp
-Endpoint:
 POST /api/v1/bootcamps
-Description: Creates a new bootcamp.
-Access: Private (Publisher, Admin)
-Update Bootcamp
-Endpoint:
 PUT /api/v1/bootcamps/:id
-Description: Updates an existing bootcamp by its ID.
-Access: Private (Publisher, Admin)
-Delete Bootcamp
-Endpoint:
 DELETE /api/v1/bootcamps/:id
-Description: Deletes a bootcamp by its ID.
-Access: Private (Publisher, Admin)
-Courses
-Get All Courses
-Endpoint:
+
+
+***Courses***
+
 GET /api/v1/courses
-Description: Retrieves all courses.
-Access: Public
-Get Single Course
-Endpoint:
 GET /api/v1/courses/:id
-Description: Retrieves a single course by its ID.
-Access: Public
-Create Course
-Endpoint:
-POST /api/v1/courses
-Description: Creates a new course.
-Access: Private (Publisher, Admin)
-Update Course
-Endpoint:
+POST /api/v1/bootcamps/:bootcampId/courses
 PUT /api/v1/courses/:id
-Description: Updates an existing course by its ID.
-Access: Private (Publisher, Admin)
-Delete Course
-Endpoint:
 DELETE /api/v1/courses/:id
-Description: Deletes a course by its ID.
-Access: Private (Publisher, Admin)
-Reviews
-Get All Reviews
-Endpoint:
-GET /api/v1/reviews
-Description: Retrieves all reviews.
-Access: Public
-Get Single Review
-Endpoint:
-GET /api/v1/reviews/:id
-Description: Retrieves a single review by its ID.
-Access: Public
-Create Review
-Endpoint:
-POST /api/v1/reviews
-Description: Creates a new review.
-Access: Private (User, Publisher, Admin)
-Update Review
-Endpoint:
-PUT /api/v1/reviews/:id
-Description: Updates an existing review by its ID.
-Access: Private (User, Publisher, Admin)
-Delete Review
-Endpoint:
-DELETE /api/v1/reviews/:id
-Description: Deletes a review by its ID.
-Access: Private (User, Publisher, Admin)
-Authentication and Authorization
-The API uses JSON Web Tokens (JWT) for authentication and authorization. Users can register and login to obtain a JWT token, which they can then use to access protected routes. The API supports different roles (user, publisher, admin), and certain routes are restricted to specific roles.
 
-Error Handling
-The API uses a custom error handling middleware to handle errors and return appropriate error responses. Errors are returned in a consistent format with a status code and error message.
+```
 
-Database
-The API uses MongoDB as the database. The Mongoose library is used to interact with the database and define the data models.
+## ⛏️ Built Using <a name = "built_using"></a>
 
-Logging
-The API uses the Morgan library for logging HTTP requests and responses. Logs are written to the console in a predefined format.
+-   [MongoDB](https://www.mongodb.com/) - Database
+-   [Express](https://expressjs.com/) - Server Framework
+-   [NodeJs](https://nodejs.org/en/) - Server Environment
+
+## ✍️ Authors <a name = "authors"></a>
+
+-   [@akingbade](https://github.com/akingbade675) - Idea & Initial work
+
+See also the list of [contributors](https://github.com/kylelobo/The-Documentation-Compendium/contributors) who participated in this project.
+
+## 🎉 Acknowledgements <a name = "acknowledgement"></a>
+
+-   Hat tip to anyone whose code was used
+-   Inspiration
+-   References

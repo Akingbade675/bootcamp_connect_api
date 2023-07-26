@@ -18,7 +18,8 @@ export default function makeBootcampRepository({ bootcampDb }) {
     }
 
     async function findById(id) {
-        const bootcamp = await bootcampDb.findById(id).populate('courses')
+        const bootcamp = await bootcampDb.findById(id)
+        //.populate('courses')
 
         return cleanBootcamp(bootcamp)
         // return {
